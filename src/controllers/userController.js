@@ -4,6 +4,7 @@ import { hashPassword } from '../utils/bcryptUtils.js';
 import { comparePassword } from '../utils/bcryptUtils.js';
 
 // POST /signup
+//creating dummy funcfor sending otp
 export const signup = async (req, res) => {
     try {
         console.log("/signup")
