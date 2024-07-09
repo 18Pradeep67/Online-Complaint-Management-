@@ -1,29 +1,22 @@
+import { hash } from 'bcrypt';
 import User from '../models/User.js';
 import { hashPassword } from '../utils/bcryptUtils.js';
 import { comparePassword } from '../utils/bcryptUtils.js';
+
+// POST /signup
 export const signup = async (req, res) => {
     try {
+        console.log("/signup")
         const { name, phno, add, role , username, password } = req.body;
-        
         const existingUser = await User.findOne({ username });
         const existingPhone = await User.findOne({ phone_no: phno });
 
         if (existingUser) {
-            return res.send(`
-                <script>
-                    alert("Username already exists!! Try again!!!");
-                    window.location.href = "/";
-                </script>
-            `);
+            return res.status(400).json({ error: "Username already exists. Please choose a different username." });
         }
 
         if (existingPhone) {
-            return res.send(`
-                <script>
-                    alert("Phone number already exists!! Try again!!!");
-                    window.location.href = "/";
-                </script>
-            `);
+            return res.status(400).json({error: "Phone number already exists. Please choose a different username."});
         }
 
         const hashedPassword = await hashPassword(password);
@@ -39,36 +32,31 @@ export const signup = async (req, res) => {
 
         await newUser.save();
 
-        res.send(`
-            <script>
-                alert("User created successfully!");
-                window.location.href = "/";
-            </script>
-        `);
+        res.status(200).send("User registered successfully");
     } catch (error) {
         console.error("Error:", error);
         res.status(500).send("An error occurred");
     }
 };
 
-export const signin = async()=>{
+// POST /signin
+export const signin = async(req, res)=>{
     try{
-        var pwd=req.body.password;
-        var hashInDb=await User.findOne({username:req.body.username});
-        const result=await comparePassword(pwd,hashInDb);
-        if(result && req.body.role== hashInDb.role){
-            res.status(200).send(`<script>
-                alert("Logged in successfully!");
-                window.location.href = "/";  
-                </script>`); // Need to redirect to the next page
+        console.log("/signin")
+        const { role , username, password } = req.body;
+        var hashInDb=await User.findOne({username});
+        if(!hashInDb){
+            return res.status(401).send("Username does not exist!!!!");
+            
+        }
+        const result=await comparePassword(password,hashInDb.password);
+        if(result && role== hashInDb.role){
+            return res.status(200).send("User logged in!!");
         }else{
-            res.status(200).send(`<script>
-                alert("Invalid Credentials!!!");
-                window.location.href = "/";
-                </script>`); // Need to redirect it to the login page again
+           return res.status(401).send("Unauthorized");
         }
     }catch(err){
-        res.status(401).send("Unauthorized");
+        res.status(500).send("Internal Server Error");
     }
 };
     
