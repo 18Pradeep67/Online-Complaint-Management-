@@ -4,7 +4,6 @@ import { hashPassword } from '../utils/bcryptUtils.js';
 import { comparePassword } from '../utils/bcryptUtils.js';
 
 // POST /signup
-// DEEP DUMMY CHANGES
 export const signup = async (req, res) => {
     try {
         console.log("/signup")
