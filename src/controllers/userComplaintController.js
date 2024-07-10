@@ -32,7 +32,7 @@ export const getStatus=async (req,res)=>{
         if(result){
             return res.status(201).json({message:"Found the complaint",status:result.status});
         }else{
-            return res.status(404   ).json({message:"Incorrect ticket number",status:"Request is not registered"});
+            return res.status(404).json({message:"Incorrect ticket number",status:"Request is not registered"});
         }
     } catch(err){
         res.status(500).send("Internal Server Error");
