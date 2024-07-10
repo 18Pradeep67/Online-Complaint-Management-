@@ -26,11 +26,6 @@ connectDB();
 // Routes
 app.use('', userRoutes);
 
-// Serve static files
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'signup.html'));
-});
-
 // Error handler
 app.use(errorHandler);
 
