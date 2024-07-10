@@ -35,7 +35,7 @@ export const signup = async (req, res) => {
         res.status(200).send("User registered successfully");
     } catch (error) {
         console.error("Error:", error);
-        res.status(500).send("An error occurred");
+        res.status(500).send("Internal Server Error");
     }
 };
 
