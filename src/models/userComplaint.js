@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const userComplaintSchema= new mongoose.Schema({
-    ticketId:{type:String,required:true},
+    ticketId:{type:String,required:true}, 
     name:{type:String, required:true},
     phoneNum:{type:Number,required:true},
     email:{type:String,required:true},

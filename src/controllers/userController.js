@@ -2,7 +2,8 @@ import { hash } from 'bcrypt';
 import User from '../models/User.js';
 import { hashPassword } from '../utils/bcryptUtils.js';
 import { comparePassword } from '../utils/bcryptUtils.js';
-
+let userCount=1;
+let empCount=1;
 // POST /signup
 export const signup = async (req, res) => {
     try {
@@ -20,8 +21,16 @@ export const signup = async (req, res) => {
         }
 
         const hashedPassword = await hashPassword(password);
-
+        let id;
+        if (role == "user") {
+            id = `USER${userCount.toString().padStart(4, '0')}`;
+            userCount += 1;
+        } else {
+            id = `AGENT${empCount.toString().padStart(4, '0')}`;
+            empCount += 1;
+        }
         const newUser = new User({
+            _id:id,
             full_name: name,
             phone_no: parseInt(phno),
             address: add,
