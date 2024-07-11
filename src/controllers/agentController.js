@@ -1,14 +1,13 @@
-import userComplain from "../models/userComplaint";
-import agentComplaints from "../models/agentComplaints";
+import userComplain from "../models/userComplaint.js";
 
 //GET /viewcomplaints
 export const viewComplaints=async(req,res)=>{
     try{
-        console.log("In viewComplaints");
-        const {id}=req.body;
-        const result=await agentComplaints.findOne({_id:id});
+        console.log("/viewcomplaints");
+        const {agentId}=req.body;
+        const result=await userComplain.find({agentId,status: { $ne: 'resolved' }});
         if(result){
-            return res.status(200).json({complaints:result.complaints});
+            return res.status(200).json({complaints:result});
         }
         else{
             return res.status(401).json({complaints:"Complaints doesnt exist"});
@@ -18,20 +17,27 @@ export const viewComplaints=async(req,res)=>{
         console.log(err);
     }
 }
-// GET /seeticket
-export const seeTicket= async(req,res)=>{
+
+// POST /updatecomplaintstatus
+
+export const updateComplaintStatus=async(req,res)=>{
     try{
-        
-        const {ticketNum}=req.body;
-        const Tickdet=await userComplain.findOne({ticketId:ticketNum});
-        if(Tickdet){
-            return res.status(200).json(Tickdet);
+        console.log("/updatecomplaintstatus");
+        const {ticketId}=req.body;
+        const ticket = await userComplain.findOneAndUpdate(
+            { ticketId },
+            { $set: {  status: 'resolved' } },
+            { new: true } // This option ensures the updated document is returned
+        );
+        if (ticket) {
+            return res.status(201).json({message:'Ticket updated successfully:', ticket});
+        } else {
+            console.log('Ticket not found');
         }
     } catch(err){
         res.status(500).send("Internal Server Error");
         console.log(err);
     }
 }
-// POST /updatestatus
 
 

@@ -7,6 +7,9 @@ const userComplaintSchema= new mongoose.Schema({
     email:{type:String,required:true},
     complaintDescription:{type:String,required:true},
     status:{type:String,required:true},
+    userId:{type:String,required:true},
+    agentId:{type:String,required:false}
+
 });
 
 const userComplain=mongoose.model("usercomplaint",userComplaintSchema);

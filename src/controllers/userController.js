@@ -22,13 +22,14 @@ export const signup = async (req, res) => {
 
         const hashedPassword = await hashPassword(password);
         let id;
-        if (role == "user") {
-            id = `USER${userCount.toString().padStart(4, '0')}`;
-            userCount += 1;
+        if (role === "user") {
+            const randomNumber = Math.floor(Math.random() * 900) + 100; // Generates a random number between 100 and 999
+            id = `USER${randomNumber}`;
         } else {
-            id = `AGENT${empCount.toString().padStart(4, '0')}`;
-            empCount += 1;
+            const randomNumber = Math.floor(Math.random() * 900) + 100; // Generates a random number between 100 and 999
+            id = `AGENT${randomNumber}`;
         }
+        
         const newUser = new User({
             _id:id,
             full_name: name,
@@ -60,7 +61,7 @@ export const signin = async(req, res)=>{
         }
         const result=await comparePassword(password,hashInDb.password);
         if(result && role== hashInDb.role){
-            return res.status(200).json({message:"Authorized",role:role});
+            return res.status(200).json({message:"Authorized",role:role,id:hashInDb._id});
         }else{
            return res.status(401).json({message:"Unauthorized"});
         }
