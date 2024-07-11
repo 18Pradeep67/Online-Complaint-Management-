@@ -51,9 +51,9 @@ export const signin = async(req, res)=>{
         }
         const result=await comparePassword(password,hashInDb.password);
         if(result && role== hashInDb.role){
-            return res.status(200).send("User logged in!!");
+            return res.status(200).json({message:"Authorized",role:role});
         }else{
-           return res.status(401).send("Unauthorized");
+           return res.status(401).json({message:"Unauthorized"});
         }
     }catch(err){
         res.status(500).send("Internal Server Error");
