@@ -29,10 +29,10 @@ export const updateComplaintStatus=async(req,res)=>{
             { $set: {  status: 'resolved' } },
             { new: true } // This option ensures the updated document is returned
         );
-        if (ticket) {
+        if (ticket && ticket.status!="resolved") {
             return res.status(201).json({message:'Ticket updated successfully:', ticket});
         } else {
-            console.log('Ticket not found');
+            return res.status(404).json({message:"Ticket not found"});
         }
     } catch(err){
         res.status(500).send("Internal Server Error");
